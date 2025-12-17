@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriSense – Agricultural Data Intelligence Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #0b1724;
+      color: #eef3ff;
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, #102542, #124f88);
+    }
+
+    .navbar-brand span {
+      color: #4fe3c1;
+      font-weight: 700;
+    }
+
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      background: radial-gradient(circle at top left, #174169, #050b12);
+      color: #ffffff;
+    }
+
+    .hero h1 {
+      font-size: 2.7rem;
+      font-weight: 700;
+    }
+
+    .hero-highlight {
+      color: #4fe3c1;
+    }
+
+    .card {
+      background: #101b2a;
+      border: 1px solid #1f314b;
+      color: #e6edff;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .card-header {
+      background: transparent;
+      border-bottom: 1px solid #1f314b;
+      font-weight: 600;
+      color: #96b4ff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4fe3c1, #1aa3ff);
+      border: none;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .badge-custom {
+      background: rgba(79, 227, 193, 0.12);
+      border: 1px solid #4fe3c1;
+      color: #4fe3c1;
+      font-size: 0.8rem;
+    }
+
+    .metric-card {
+      background: rgba(10, 22, 40, 0.9);
+      border-radius: 16px;
+      border: 1px solid #253c5c;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #4fe3c1;
+    }
+
+    .pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid #213b63;
+      color: #9cb6ff;
+    }
+
+    .footer {
+      border-top: 1px solid #1b2840;
+      color: #7083a4;
+    }
+
+    /* Result sections */
+    #recommendation-card {
+      display: none;
+    }
+
+    #spinner {
+      display: none;
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: #9fb9ff;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .bg-soft {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      border: 1px solid #1f314b;
+    }
+
+    .table-dark th, .table-dark td {
+      vertical-align: middle;
+    }
+
+    a {
+      color: #4fe3c1;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">
+      Agri<span>Sense</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#platform">Platform</a></li>
+        <li class="nav-item"><a class="nav-link" href="#advisor">Decision Engine</a></li>
+        <li class="nav-item"><a class="nav-link" href="#insights">Insights</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="platform">
+  <div class="container mt-5 pt-4">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4">
+        <span class="badge badge-custom mb-3">Agricultural Data Intelligence Platform</span>
+        <h1 class="mb-3">
+          Turn <span class="hero-highlight">weather, soil & crop data</span> into
+          smarter farm decisions.
+        </h1>
+        <p class="lead text-light-50">
+          AgriSense combines live weather APIs, soil insights, and crop intelligence
+          to recommend irrigation, fertilization, and harvesting actions – in seconds.
+        </p>
+        <div class="d-flex flex-wrap gap-2 my-3">
+          <span class="pill">Weather‑aware irrigation</span>
+          <span class="pill">Soil‑specific fertilizer plans</span>
+          <span class="pill">Harvest timing insights</span>
+        </div>
+        <a href="#advisor" class="btn btn-primary btn-lg mt-2">
+          Launch Decision Advisor
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="metric-card p-3">
+              <p class="mb-1 text-muted small">Projected Yield Boost</p>
+              <div class="metric-value" id="metric-yield">+18%</div>
+              <p class="small text-success mb-0">With optimized irrigation</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="metric-card p-3">
+              <p class="mb-1 text-muted small">Water Savings</p>
+              <div class="metric-value" id="metric-water">–22%</div>
+              <p class="small text-info mb-0">Vs. traditional schedule</p>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="metric-card p-3 mt-2">
+              <p class="mb-1 text-muted small">Live Weather Snapshot (Mock API)</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="h5 mb-1" id="metric-location">Loading...</div>
+                  <p class="small mb-0" id="metric-summary">Fetching latest forecast...</p>
+                </div>
+                <div class="text-end">
+                  <div class="display-6" id="metric-temp">--°C</div>
+                  <p class="small mb-0" id="metric-rain">Rain chance: --%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /col -->
+    </div>
+  </div>
+</section>
+
+<!-- DECISION ADVISOR -->
+<section id="advisor" class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- FORM -->
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-header">
+            Smart Farm Decision Advisor
+          </div>
+          <div class="card-body">
+            <p class="small text-muted mb-3">
+              Enter your soil profile, crop details, and recent rainfall. The engine
+              will combine this with weather‑API data (simulated) to suggest irrigation
+              and fertilizer actions for the next 7 days.
+            </p>
+
+            <form id="advisor-form">
+              <div class="mb-3">
+                <label class="form-label">Soil Type</label>
+                <select class="form-select" id="soilType" required>
+                  <option value="">Select soil type</option>
+                  <option value="sandy">Sandy</option>
+                  <option value="loamy">Loamy</option>
+                  <option value="clay">Clay</option>
+                  <option value="black">Black</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Crop</label>
+                <select class="form-select" id="cropType" required>
+                  <option value="">Select crop</option>
+                  <option value="wheat">Wheat</option>
+                  <option value="rice">Rice</option>
+                  <option value="maize">Maize</option>
+                  <option value="cotton">Cotton</option>
+                  <option value="pulses">Pulses</option>
+                </select>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Field Area (acres)</label>
+                  <input type="number" class="form-control" id="fieldArea"
+                         placeholder="e.g., 2.5" min="0.1" step="0.1" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Crop Growth Stage</label>
+                  <select class="form-select" id="growthStage" required>
+                    <option value="">Select stage</option>
+                    <option value="early">Early / Seedling</option>
+                    <option value="vegetative">Vegetative</option>
+                    <option value="flowering">Flowering</option>
+                    <option value="maturity">Maturity</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Last 7‑day Rainfall (mm)</label>
+                  <input type="number" class="form-control" id="rainfall"
+                         placeholder="e.g., 8" min="0" step="1" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Irrigation System</label>
+                  <select class="form-select" id="irrigationType" required>
+                    <option value="">Select system</option>
+                    <option value="flood">Flood / Basin</option>
+                    <option value="sprinkler">Sprinkler</option>
+                    <option value="drip">Drip</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Nitrogen Level (Farmer Assessment)</label>
+                <select class="form-select" id="nitrogenLevel" required>
+                  <option value="">Select level</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 mt-2">
+                Generate Recommendations
+              </button>
+            </form>
+
+            <div id="spinner" class="text-center mt-3">
+              <div class="spinner-border text-info" role="status"></div>
+              <p class="small mt-2 text-muted">Running data‑intelligence engine…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMMENDATIONS -->
+      <div class="col-lg-6">
+        <div id="recommendation-card" class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            Recommendation Summary
+            <span class="badge badge-custom" id="riskTag">NORMAL RISK</span>
+          </div>
+          <div class="card-body">
+            <p class="section-title mb-1">7‑Day Strategy</p>
+            <h5 id="headline" class="mb-3"></h5>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="bg-soft p-3 h-100">
+                  <p class="small text-muted mb-1">Irrigation</p>
+                  <h6 id="irrigationPlan" class="mb-2"></h6>
+                  <p class="small mb-0" id="irrigationDetail"></p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="bg-soft p-3 h-100">
+                  <p class="small text-muted mb-1">Fertilizer</p>
+                  <h6 id="fertPlan" class="mb-2"></h6>
+                  <p class="small mb-0" id="fertDetail"></p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="border-secondary my-4">
+
+            <p class="section-title mb-1">Weather‑Aware Risk View</p>
+            <div class="row">
+              <div class="col-md-6">
+                <ul class="small mb-0">
+                  <li id="weatherInsight"></li>
+                  <li id="soilInsight"></li>
+                  <li id="growthInsight"></li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <ul class="small mb-0">
+                  <li id="waterUseInsight"></li>
+                  <li id="fertUseInsight"></li>
+                  <li id="yieldInsight"></li>
+                </ul>
+              </div>
+            </div>
+
+            <hr class="border-secondary my-4">
+
+            <p class="section-title mb-1">Field‑Level Snapshot</p>
+            <div class="table-responsive">
+              <table class="table table-sm table-dark align-middle mb-0">
+                <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>Comment</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Target Irrigation</td>
+                  <td id="tableIrrigation"></td>
+                  <td id="tableIrrigationComment"></td>
+                </tr>
+                <tr>
+                  <td>N Recommendation</td>
+                  <td id="tableNitrogen"></td>
+                  <td id="tableNitrogenComment"></td>
+                </tr>
+                <tr>
+                  <td>Expected Yield Impact</td>
+                  <td id="tableYield"></td>
+                  <td id="tableYieldComment"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="text-center text-muted mt-4">
+          <p class="mb-1">Run the advisor to unlock tailored irrigation & fertilizer plans.</p>
+          <small>Powered by mock weather API + rule‑based agronomy logic.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights" class="pb-5">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="bg-soft p-3 h-100">
+          <p class="section-title mb-1">Why data‑driven?</p>
+          <p class="small mb-0">
+            By combining weather, soil and crop stage, AgriSense aims to reduce water
+            stress events and avoid over‑fertilization, improving yield and sustainability.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-soft p-3 h-100">
+          <p class="section-title mb-1">Hackathon‑ready</p>
+          <p class="small mb-0">
+            The platform can plug into real weather APIs (Open‑Meteo, OpenWeather, etc.)
+            and real soil datasets later with minimal changes in the JavaScript layer.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="bg-soft p-3 h-100">
+          <p class="section-title mb-1">Next steps</p>
+          <p class="small mb-0">
+            Add user login, farm profiles, seasonal reports, and exportable PDF
+            recommendations to evolve this into a full SaaS product.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer py-3">
+  <div class="container text-center small">
+    AgriSense &copy; 2025 · Built for hackathon demo · Uses Bootstrap, JavaScript and mock APIs.
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // -------- MOCK WEATHER API (replace later with real API) ----------
+  function mockWeatherAPI() {
+    // In a real project, call fetch('https://api.open-meteo.com/...') etc.
+    const locations = ["Telangana, IN", "Punjab, IN", "Maharashtra, IN", "Andhra Pradesh, IN"];
+    const summaries = [
+      "Below‑normal rainfall expected; hotter afternoons.",
+      "Mild temperatures with isolated showers.",
+      "Hot and dry conditions dominating next week.",
+      "Humid with scattered thunderstorms in evenings."
+    ];
+    const index = Math.floor(Math.random() * locations.length);
+    const temp = (28 + Math.random() * 6).toFixed(1);
+    const rainChance = (10 + Math.random() * 60).toFixed(0);
+
+    return {
+      location: locations[index],
+      summary: summaries[index],
+      temperature: temp,
+      rainChance: rainChance
+    };
+  }
+
+  function updateWeatherWidget() {
+    const w = mockWeatherAPI();
+    document.getElementById("metric-location").innerText = w.location;
+    document.getElementById("metric-summary").innerText = w.summary;
+    document.getElementById("metric-temp").innerText = w.temperature + "°C";
+    document.getElementById("metric-rain").innerText = "Rain chance: " + w.rainChance + "%";
+  }
+
+  // Run on load
+  updateWeatherWidget();
+  setInterval(updateWeatherWidget, 15000); // refresh every 15s for demo
+
+  // --------- DECISION ENGINE ----------
+  const form = document.getElementById("advisor-form");
+  const spinner = document.getElementById("spinner");
+  const recCard = document.getElementById("recommendation-card");
+  const emptyState = document.getElementById("empty-state");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    spinner.style.display = "block";
+    recCard.style.display = "none";
+
+    setTimeout(() => {
+      spinner.style.display = "none";
+      generateRecommendations();
+    }, 1200); // simulate processing time
+  });
+
+  function generateRecommendations() {
+    const soil = document.getElementById("soilType").value;
+    const crop = document.getElementById("cropType").value;
+    const area = parseFloat(document.getElementById("fieldArea").value || "1");
+    const stage = document.getElementById("growthStage").value;
+    const rainfall = parseFloat(document.getElementById("rainfall").value || "0");
+    const irrigation = document.getElementById("irrigationType").value;
+    const nitrogen = document.getElementById("nitrogenLevel").value;
+
+    const weather = mockWeatherAPI(); // would be replaced by real API result
+
+    // --- Simple rule‑based logic ---
+    let irrigationPercent = 100;
+    let nitrogenKgPerAcre = 0;
+    let riskLabel = "NORMAL RISK";
+    let riskColor = "#4fe3c1";
+    let yieldImpact = "+8–15%";
+
+    // Adjust irrigation based on rainfall and rain chance
+    if (rainfall < 10 && weather.rainChance < 30) {
+      irrigationPercent = 120;
+      yieldImpact = "+15–22%";
+    } else if (rainfall > 40 || weather.rainChance > 70) {
+      irrigationPercent = 80;
+      yieldImpact = "+5–10%";
+    } else {
+      irrigationPercent = 100;
+    }
+
+    // Soil factors
+    if (soil === "sandy") irrigationPercent += 10;
+    if (soil === "clay") irrigationPercent -= 5;
+
+    // Growth stage water sensitivity
+    if (stage === "flowering") irrigationPercent += 10;
+
+    // Cap between 60 and 150
+    irrigationPercent = Math.min(150, Math.max(60, irrigationPercent));
+
+    // Nitrogen recommendation (very simplified)
+    const baseN = crop === "rice" || crop === "wheat" ? 40 : 25;
+    if (nitrogen === "low") nitrogenKgPerAcre = baseN * 1.2;
+    else if (nitrogen === "medium") nitrogenKgPerAcre = baseN * 0.8;
+    else nitrogenKgPerAcre = baseN * 0.4;
+
+    nitrogenKgPerAcre = Math.round(nitrogenKgPerAcre);
+
+    // Risk label
+    if (weather.rainChance < 20 && rainfall < 5) {
+      riskLabel = "HIGH DROUGHT RISK";
+      riskColor = "#ff7676";
+    } else if (weather.rainChance > 70 && rainfall > 40) {
+      riskLabel = "WATERLOGGING RISK";
+      riskColor = "#ffb347";
+    }
+
+    // --- Fill UI ---
+    document.getElementById("headline").innerText =
+      `For ${crop.toUpperCase()} on ${area} acre(s) of ${soil} soil, focus on ` +
+      `optimized irrigation and stage‑specific nutrition this week.`;
+
+    document.getElementById("riskTag").innerText = riskLabel;
+    document.getElementById("riskTag").style.borderColor = riskColor;
+    document.getElementById("riskTag").style.color = riskColor;
+
+    document.getElementById("irrigationPlan").innerText =
+      `${irrigationPercent}% of usual irrigation schedule`;
+
+    document.getElementById("irrigationDetail").innerText =
+      `Because the last 7‑day rainfall is ${rainfall} mm and upcoming rain chance is `
+      + `${weather.rainChance}%, the platform suggests adjusting irrigation to `
+      + `${irrigationPercent}% of your standard plan for the next 7 days.`;
+
+    document.getElementById("fertPlan").innerText =
+      `${nitrogenKgPerAcre} kg Nitrogen / acre equivalent`;
+
+    document.getElementById("fertDetail").innerText =
+      `Based on your reported nitrogen level (${nitrogen}) and crop type (${crop}), ` +
+      `apply around ${nitrogenKgPerAcre} kg N per acre using split doses to avoid losses.`;
+
+    document.getElementById("weatherInsight").innerText =
+      `Location: ${weather.location} – ${weather.summary}`;
+    document.getElementById("soilInsight").innerText =
+      `Soil type ${soil} affects water holding; recommendations are adjusted accordingly.`;
+    document.getElementById("growthInsight").innerText =
+      `Growth stage ${stage} is prioritized in the risk model for stress avoidance.`;
+    document.getElementById("waterUseInsight").innerText =
+      `Expected water use change vs. normal: ${Math.round(100 - irrigationPercent)}%.`;
+    document.getElementById("fertUseInsight").innerText =
+      `Fertilizer focus on nitrogen; phosphorus & potassium can be integrated later.`;
+    document.getElementById("yieldInsight").innerText =
+      `Estimated yield impact with compliance: ${yieldImpact}.`;
+
+    // Table snapshot
+    document.getElementById("tableIrrigation").innerText =
+      irrigationPercent + "% of usual irrigation";
+    document.getElementById("tableIrrigationComment").innerText =
+      irrigationPercent > 100
+        ? "Increase to offset dry forecast and low rainfall."
+        : irrigationPercent < 100
+          ? "Reduce to avoid over‑watering under wet conditions."
+          : "Maintain standard schedule; conditions near normal.";
+
+    document.getElementById("tableNitrogen").innerText =
+      nitrogenKgPerAcre + " kg N / acre";
+    document.getElementById("tableNitrogenComment").innerText =
+      nitrogen === "low"
+        ? "Boost nitrogen to correct visible deficiency symptoms."
+        : nitrogen === "medium"
+          ? "Moderate top‑up to maintain optimal canopy growth."
+          : "Low dose only; high N status may increase lodging risk.";
+
+    document.getElementById("tableYield").innerText = yieldImpact;
+    document.getElementById("tableYieldComment").innerText =
+      "Yield impact assumes farmer follows irrigation and N guidance consistently.";
+
+    emptyState.style.display = "none";
+    recCard.style.display = "block";
+  }
+</script>
+
+</body>
+</html>
